@@ -15,7 +15,7 @@ The Scripted REST bundle is part of the [ConnId](http://connid.tirasa.net) proje
 </dependency>
 ```
 
-where `connid.scriptedrest.version` is one of [available](http://repo1.maven.org/maven2/net/tirasa/connid/bundles/rest/net.tirasa.connid.bundles.rest/).
+where `connid.rest.version` is one of [available](http://repo1.maven.org/maven2/net/tirasa/connid/bundles/rest/net.tirasa.connid.bundles.rest/).
 
 ### Downloads
 
