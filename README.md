@@ -9,13 +9,13 @@ The Scripted REST bundle is part of the [ConnId](http://connid.tirasa.net) proje
 
 ```XML
 <dependency>
-  <groupId>net.tirasa.connid.bundles.rest</groupId>
+  <groupId>net.tirasa.connid.bundles</groupId>
   <artifactId>net.tirasa.connid.bundles.rest</artifactId>
   <version>${connid.rest.version}</version>
 </dependency>
 ```
 
-where `connid.rest.version` is one of [available](http://repo1.maven.org/maven2/net/tirasa/connid/bundles/rest/net.tirasa.connid.bundles.rest/).
+where `connid.rest.version` is one of [available](http://repo1.maven.org/maven2/net/tirasa/connid/bundles/net.tirasa.connid.bundles.rest/).
 
 ### Downloads
 
