@@ -3,8 +3,7 @@ language: java
 env:
   global:
     - SONATYPE_USERNAME=chicchiricco
-    - secure: "E02ZYB62ONUPjzDJb7ziTs1/1F0n64nEYc+d/MS/yppabkKoV/KT5k90ZnbH\nxyVlbywRfaR6qYUuafXzeFHD/oNHfvyM+E3EI0NPaj/uh4pkH9zvTqsyxvsU\nkplG/+XSe5NaG6vF8/5KzTSOGOyY2sUv0jjYs8+cauDtLvuNHxM="
-
+    - secure: "iLyXw035ukn3t+kMviTgfCp8mTLy59E6hGQyYU0tx/kkV/kVCYbNLN2ULQWlV7C1/9oNmUHjatSVgJNCTXaHJ8JPTySbmliDxtGsw33MALfA5T2ZvT/4/VvBB3jjYhNBHj67Ow5XoLo5deoJN2T0efkqazkLJYkTMAEDtJrJgVaU3fT3wPWG2eQhgDorJ0+UpdIhr6iFIW2Qdq3YptCyHaqY6pKp2RWMtbdGXq4PRr1SOxA/GaSHb1OElTOyMeTIopDMfxDnBgnjemRnb7QIEEK66gsZCjJrsLf13LLYGqGbscdmkyEE59KWVxkXPmRU6ZAZY6MUWCbC5fDegvG0d1nxQFx279nu368+MSPrG4z2CjlHd8sceDLljVnnwn+GDHnlJppQ/rK4EsZ0lgPei2xcDp1CFYs8sh3sAcbbqLmzdy0OqWaIftnwSyB/h1aGaMCOqdT0mleazZY2l13Z2oDdPCbMrLSgJm+TyoAeysHpxqXNzIcA01ZwTzPvFpeY8beHWlUt2iw8qUwKJ+9exkzguTA6GgBLhaO2G40VNvtDcC66UonFwv17sD9me1sFZBjtTVjwWMp35dLTtsuKAeuL7GwKzV52zN0ZTptHWCbfb+R53axBwOy1JNo2SDpfXgSKixyvRk3M+eV7iRyHHr3zvXZBudy/+jXDWXy2hts="
 
 after_success:
   - python .travis.addServer.py
