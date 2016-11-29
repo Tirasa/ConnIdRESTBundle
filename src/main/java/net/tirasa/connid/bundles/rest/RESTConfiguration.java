@@ -15,30 +15,79 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import org.identityconnectors.common.StringUtil;
-import org.identityconnectors.framework.common.exceptions.ConfigurationException;
-import org.identityconnectors.framework.spi.AbstractConfiguration;
+import javax.ws.rs.core.MediaType;
+import net.tirasa.connid.commons.scripted.AbstractScriptedConfiguration;
+import org.identityconnectors.common.security.GuardedString;
 import org.identityconnectors.framework.spi.ConfigurationProperty;
 
-public class RESTConfiguration extends AbstractConfiguration {
+public class RESTConfiguration extends AbstractScriptedConfiguration {
 
-    private String sampleProperty = "SAMPLE VALUE";
+    private String baseAddress;
 
-    @ConfigurationProperty(displayMessageKey = "sampleProperty.display",
-            helpMessageKey = "sampleProperty.help", order = 1)
-    public String getSampleProperty() {
-        return sampleProperty;
+    @ConfigurationProperty(displayMessageKey = "baseAddress.display",
+            helpMessageKey = "baseAddress.help", order = -3, required = true)
+    public String getBaseAddress() {
+        return baseAddress;
     }
 
-    public void setSampleProperty(String sampleProperty) {
-        this.sampleProperty = sampleProperty;
+    public void setBaseAddress(String baseAddress) {
+        this.baseAddress = baseAddress;
+    }
+
+    private String accept = MediaType.APPLICATION_JSON;
+
+    @ConfigurationProperty(displayMessageKey = "accept.display",
+            helpMessageKey = "accept.help", order = -2, required = true)
+    public String getAccept() {
+        return accept;
+    }
+
+    public void setAccept(final String accept) {
+        this.accept = accept;
+    }
+
+    private String contentType = MediaType.APPLICATION_JSON;
+
+    @ConfigurationProperty(displayMessageKey = "contentType.display",
+            helpMessageKey = "contentType.help", order = -1, required = true)
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(final String contentType) {
+        this.contentType = contentType;
+    }
+
+    private String username;
+
+    @ConfigurationProperty(displayMessageKey = "username.display",
+            helpMessageKey = "username.help", order = 0)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private GuardedString password;
+
+    @ConfigurationProperty(displayMessageKey = "password.display",
+            helpMessageKey = "password.help", order = 1, confidential = true)
+    public GuardedString getPassword() {
+        return password;
+    }
+
+    public void setPassword(GuardedString password) {
+        this.password = password;
     }
 
     @Override
     public void validate() {
-        if (StringUtil.isBlank(sampleProperty)) {
-            throw new ConfigurationException("sampleProperty must not be blank!");
-        }
-    }
+        LOG.info("Validate " + getClass().getName());
 
+        super.validate();
+
+        LOG.ok("Configuration is valid");
+    }
 }
