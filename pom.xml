@@ -197,6 +197,51 @@
         </executions>
       </plugin>      
 
+      <!-- Put NOTICE and LICENSE files in all artifacts and javadocs -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>copy-artifact-legal-files</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes/META-INF</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${rootpom.basedir}</directory>
+                  <includes>
+                    <include>LICENSE</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-javadoc-legal-files</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/apidocs/META-INF</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${rootpom.basedir}</directory>
+                  <includes>
+                    <include>LICENSE</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -228,6 +273,9 @@
     </plugins>
     
     <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
       <resource>
         <directory>.</directory>
         <targetPath>META-INF</targetPath>
