@@ -213,9 +213,10 @@
               <outputDirectory>${project.build.directory}/classes/META-INF</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${rootpom.basedir}</directory>
+                  <directory>.</directory>
                   <includes>
                     <include>LICENSE</include>
+                    <include>NOTICE</include>
                   </includes>
                 </resource>
               </resources>
@@ -231,9 +232,10 @@
               <outputDirectory>${project.build.directory}/apidocs/META-INF</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${rootpom.basedir}</directory>
+                  <directory>.</directory>
                   <includes>
                     <include>LICENSE</include>
+                    <include>NOTICE</include>
                   </includes>
                 </resource>
               </resources>
