@@ -51,6 +51,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
     @Override
     protected Map<String, Object> buildArguments() {
         final Map<String, Object> arguments = new HashMap<String, Object>();
+        arguments.put("configuration", config);
         arguments.put("client", client);
         return arguments;
     }
