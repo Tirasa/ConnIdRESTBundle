@@ -1,5 +1,7 @@
+sudo: false
 language: java
- 
+jdk:
+  - openjdk7
 env:
   global:
     - SONATYPE_USERNAME=chicchiricco
