@@ -82,6 +82,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.password = password;
     }
 
+    private String bearer;
+
+    @ConfigurationProperty(displayMessageKey = "bearer.display",
+            helpMessageKey = "bearer.help", order = 2)
+    public String getBearer() {
+        return bearer;
+    }
+
+    public void setBearer(final String bearer) {
+        this.bearer = bearer;
+    }
+
     @Override
     public void validate() {
         LOG.info("Validate " + getClass().getName());

@@ -15,11 +15,11 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import static net.tirasa.connid.commons.scripted.Constants.MSG_OBJECT_CLASS_REQUIRED;
-
 import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.core.HttpHeaders;
 import net.tirasa.connid.commons.scripted.AbstractScriptedConnector;
+import net.tirasa.connid.commons.scripted.Constants;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.identityconnectors.common.security.SecurityUtil;
 import org.identityconnectors.framework.common.objects.ObjectClass;
@@ -42,8 +42,11 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 config.getUsername(),
                 config.getPassword() == null ? null : SecurityUtil.decrypt(config.getPassword()),
                 null).
-                accept(this.getConfiguration().getAccept()).
-                type(this.getConfiguration().getContentType());
+                accept(config.getAccept()).
+                type(config.getContentType());
+        if (config.getBearer() != null) {
+            this.client.header(HttpHeaders.AUTHORIZATION, "Bearer " + config.getBearer());
+        }
 
         super.init(cfg);
     }
@@ -61,7 +64,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
             final ObjectClass objectClass, final OperationOptions options) {
 
         if (objectClass == null) {
-            throw new IllegalArgumentException(config.getMessage(MSG_OBJECT_CLASS_REQUIRED));
+            throw new IllegalArgumentException(config.getMessage(Constants.MSG_OBJECT_CLASS_REQUIRED));
         }
         LOG.ok("ObjectClass: {0}", objectClass.getObjectClassValue());
 
