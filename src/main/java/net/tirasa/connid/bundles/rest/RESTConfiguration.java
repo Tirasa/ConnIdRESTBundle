@@ -82,16 +82,64 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.password = password;
     }
 
-    private String bearer;
+    private String clientId;
 
-    @ConfigurationProperty(displayMessageKey = "bearer.display",
-            helpMessageKey = "bearer.help", order = 2)
-    public String getBearer() {
-        return bearer;
+    @ConfigurationProperty(displayMessageKey = "clientId.display",
+            helpMessageKey = "clientId.help", order = 2)
+    public String getCliendId() {
+        return clientId;
     }
 
-    public void setBearer(final String bearer) {
-        this.bearer = bearer;
+    public void setCliendId(final String clientId) {
+        this.clientId = clientId;
+    }
+
+    private String clientSecret;
+
+    @ConfigurationProperty(displayMessageKey = "clientSecret.display",
+            helpMessageKey = "clientSecret.help", order = 3)
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(final String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
+
+    private String accessTokenNodeId;
+
+    @ConfigurationProperty(displayMessageKey = "accessTokenNodeId.display",
+            helpMessageKey = "accessTokenNodeId.help", order = 4)
+    public String getAccessTokenNodeId() {
+        return accessTokenNodeId;
+    }
+
+    public void setAccessTokenNodeId(final String accessTokenNodeId) {
+        this.accessTokenNodeId = accessTokenNodeId;
+    }
+
+    private String accessTokenBaseAddress;
+
+    @ConfigurationProperty(displayMessageKey = "accessTokenBaseAddress.display",
+            helpMessageKey = "accessTokenBaseAddress.help", order = 5)
+    public String getAccessTokenBaseAddress() {
+        return accessTokenBaseAddress;
+    }
+
+    public void setAccessTokenBaseAddress(final String accessTokenBaseAddress) {
+        this.accessTokenBaseAddress = accessTokenBaseAddress;
+    }
+
+    private String accessTokenContentType = MediaType.APPLICATION_FORM_URLENCODED;
+
+    @ConfigurationProperty(displayMessageKey = "accessTokenContentType.display",
+            helpMessageKey = "accessTokenContentType.help", order = 6)
+    public String getAccessTokenContentType() {
+        return accessTokenContentType;
+    }
+
+    public void setAccessTokenContentType(final String accessTokenContentType) {
+        this.accessTokenContentType = accessTokenContentType;
     }
 
     @Override

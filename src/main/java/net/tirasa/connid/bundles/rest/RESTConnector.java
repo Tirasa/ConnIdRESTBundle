@@ -15,13 +15,18 @@
  */
 package net.tirasa.connid.bundles.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
 import net.tirasa.connid.commons.scripted.AbstractScriptedConnector;
 import net.tirasa.connid.commons.scripted.Constants;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.identityconnectors.common.StringUtil;
 import org.identityconnectors.common.security.SecurityUtil;
+import org.identityconnectors.framework.common.exceptions.ConnectorException;
 import org.identityconnectors.framework.common.objects.ObjectClass;
 import org.identityconnectors.framework.common.objects.OperationOptions;
 import org.identityconnectors.framework.common.objects.filter.FilterTranslator;
@@ -44,11 +49,56 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 null).
                 accept(config.getAccept()).
                 type(config.getContentType());
-        if (config.getBearer() != null) {
-            this.client.header(HttpHeaders.AUTHORIZATION, "Bearer " + config.getBearer());
+        if (StringUtil.isNotBlank(config.getCliendId())
+                && StringUtil.isNotBlank(config.getClientSecret())
+                && StringUtil.isNotBlank(config.getAccessTokenBaseAddress())
+                && StringUtil.isNotBlank(config.getAccessTokenNodeId())) {
+            this.client = WebClient.create(config.getBaseAddress())
+                    .type(config.getAccept())
+                    .accept(config.getContentType());
+            this.client.header(HttpHeaders.AUTHORIZATION, "Bearer " + generateToken());
+        } else {
+            this.client = WebClient.create(config.getBaseAddress(),
+                    null,
+                    config.getUsername(),
+                    config.getPassword() == null ? null : SecurityUtil.decrypt(config.getPassword()),
+                    null)
+                    .type(config.getAccept())
+                    .accept(config.getContentType());
         }
 
         super.init(cfg);
+    }
+
+    private String generateToken() {
+        WebClient webClient = WebClient
+                .create(config.getAccessTokenBaseAddress())
+                .type(config.getAccessTokenContentType())
+                .accept(config.getAccept());
+
+        String contentUri = new StringBuilder("&client_id=")
+                .append(config.getCliendId())
+                .append("&client_secret=")
+                .append(config.getClientSecret())
+                .append("&username=")
+                .append(config.getUsername())
+                .append("&password=")
+                .append(SecurityUtil.decrypt(config.getPassword()))
+                .toString();
+        String token = null;
+        try {
+            Response response = webClient.post(contentUri);
+            String responseAsString = response.readEntity(String.class);
+            JsonNode result = new ObjectMapper().readTree(responseAsString);
+            if (result == null || !result.hasNonNull(config.getAccessTokenNodeId())) {
+                throw new ConnectorException("No access token found - " + responseAsString);
+            }
+            token = result.get(config.getAccessTokenNodeId()).textValue();
+        } catch (Exception ex) {
+            throw new ConnectorException("While obtaining authentication token", ex);
+        }
+
+        return token;
     }
 
     @Override
