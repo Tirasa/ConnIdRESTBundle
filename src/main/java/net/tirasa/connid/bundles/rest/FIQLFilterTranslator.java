@@ -25,6 +25,7 @@ import org.identityconnectors.framework.common.objects.filter.AttributeFilter;
 import org.identityconnectors.framework.common.objects.filter.ContainsFilter;
 import org.identityconnectors.framework.common.objects.filter.EndsWithFilter;
 import org.identityconnectors.framework.common.objects.filter.EqualsFilter;
+import org.identityconnectors.framework.common.objects.filter.EqualsIgnoreCaseFilter;
 import org.identityconnectors.framework.common.objects.filter.GreaterThanFilter;
 import org.identityconnectors.framework.common.objects.filter.GreaterThanOrEqualFilter;
 import org.identityconnectors.framework.common.objects.filter.LessThanFilter;
@@ -99,6 +100,14 @@ public class FIQLFilterTranslator extends AbstractFilterTranslator<Map<String, O
         return createMap(not ? ConditionType.NOT_EQUALS : ConditionType.EQUALS, filter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Map<String, Object> createEqualsIgnoreCaseExpression(EqualsIgnoreCaseFilter filter, boolean not) {
+        return createMap(not ? ConditionType.NOT_EQUALS : ConditionType.EQUALS, filter);
+    }
+    
     /**
      * {@inheritDoc}
      */
