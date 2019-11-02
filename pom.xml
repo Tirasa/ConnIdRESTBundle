@@ -78,7 +78,7 @@
   <properties>
     <connid.version>1.4.5.1</connid.version>
     <cxf.version>3.1.18</cxf.version>
-    <jackson.version>2.9.10</jackson.version>
+    <jackson.version>2.10.0</jackson.version>
     
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
