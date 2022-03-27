@@ -78,7 +78,7 @@
   <properties>
     <connid.version>1.4.5.1</connid.version>
     <cxf.version>3.3.13</cxf.version>
-    <jackson.version>2.11.4</jackson.version>
+    <jackson.version>2.12.6</jackson.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
+      <version>${jackson.version}.1</version>
     </dependency>
         
     <!-- TEST -->
