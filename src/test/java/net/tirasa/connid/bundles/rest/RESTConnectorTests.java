@@ -15,12 +15,12 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,7 +48,7 @@ import org.identityconnectors.framework.common.objects.SyncDelta;
 import org.identityconnectors.framework.common.objects.SyncResultsHandler;
 import org.identityconnectors.framework.common.objects.Uid;
 import org.identityconnectors.test.common.TestHelpers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RESTConnectorTests extends AbstractTests {
 
@@ -94,7 +94,7 @@ public class RESTConnectorTests extends AbstractTests {
     private Set<Attribute> getUniqueSample() {
         String uuid = UUID.randomUUID().toString();
 
-        Set<Attribute> attrs = new HashSet<Attribute>();
+        Set<Attribute> attrs = new HashSet<>();
         attrs.add(new Name("username" + uuid));
         attrs.add(AttributeBuilder.buildPassword(uuid.toCharArray()));
         attrs.add(AttributeBuilder.build("firstName", CollectionUtil.newSet("firstName")));
@@ -121,7 +121,7 @@ public class RESTConnectorTests extends AbstractTests {
     public void update() {
         Uid created = doCreate();
 
-        Set<Attribute> replaceAttributes = new HashSet<Attribute>();
+        Set<Attribute> replaceAttributes = new HashSet<>();
         replaceAttributes.add(AttributeBuilder.build("email", CollectionUtil.newSet("updatedEmail")));
 
         Uid updated = newFacade().update(
@@ -166,7 +166,7 @@ public class RESTConnectorTests extends AbstractTests {
         doCreate();
         doCreate();
 
-        final List<ConnectorObject> result = new ArrayList<ConnectorObject>();
+        final List<ConnectorObject> result = new ArrayList<>();
         newFacade().search(ObjectClass.ACCOUNT,
                 null,
                 new ResultsHandler() {
@@ -188,7 +188,7 @@ public class RESTConnectorTests extends AbstractTests {
         doCreate();
         doCreate();
 
-        final List<SyncDelta> result = new ArrayList<SyncDelta>();
+        final List<SyncDelta> result = new ArrayList<>();
         newFacade().sync(ObjectClass.ACCOUNT,
                 null,
                 new SyncResultsHandler() {
@@ -209,7 +209,7 @@ public class RESTConnectorTests extends AbstractTests {
         Uid created = doCreate();
 
         // first update to set test credentials
-        Set<Attribute> replaceAttributes = new HashSet<Attribute>();
+        Set<Attribute> replaceAttributes = new HashSet<>();
         replaceAttributes.add(new Name("username"));
         replaceAttributes.add(AttributeBuilder.buildPassword("password".toCharArray()));
 

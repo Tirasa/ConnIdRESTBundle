@@ -24,9 +24,9 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 
 public class AbstractTests {
 
@@ -34,12 +34,12 @@ public class AbstractTests {
 
     private static Server SERVER;
 
-    @BeforeClass
+    @BeforeAll
     public static void startServer() throws Exception {
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
         sf.setResourceClasses(UserService.class);
 
-        List<Object> providers = new ArrayList<Object>();
+        List<Object> providers = new ArrayList<>();
         providers.add(new JacksonJaxbJsonProvider());
         sf.setProviders(providers);
 
@@ -49,16 +49,15 @@ public class AbstractTests {
         SERVER = sf.create();
     }
 
-    @AfterClass
+    @AfterAll
     public static void stopServer() throws Exception {
         SERVER.stop();
         SERVER.destroy();
     }
 
-    @After
+    @AfterEach
     public void clear() {
         UserService userService = JAXRSClientFactory.create(BASE_ADDRESS, UserService.class);
         userService.clear();
     }
-
 }
