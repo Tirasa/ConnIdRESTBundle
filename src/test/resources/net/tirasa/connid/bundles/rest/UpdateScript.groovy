@@ -28,6 +28,8 @@ import org.apache.cxf.jaxrs.client.WebClient
 //     of that attribute in the target object all of the values of that attribute in the input set.
 //   - REMOVE_ATTRIBUTE_VALUES: For each attribute that the input set contains, remove from the current values
 //     of that attribute in the target object any value that matches one of the values of the attribute from the input set.
+//   - UPDATE_DELTA: Three input maps are provided: valuesToAdd, valuesToRemove and valuesToReplace
+//     For each map key, perform the corresponding actions on attribute values
 
 // log: a handler to the Log facility
 //
@@ -95,6 +97,11 @@ case "UPDATE":
 case "ADD_ATTRIBUTE_VALUES":
   break
 
+case "REMOVE_ATTRIBUTE_VALUES":
+  break
+
+case "UPDATE_DELTA":
+  break
 
 default:
   break
