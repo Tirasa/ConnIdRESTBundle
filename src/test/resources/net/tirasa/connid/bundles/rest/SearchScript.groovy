@@ -16,7 +16,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.core.Response
 import org.apache.cxf.jaxrs.client.WebClient
 import org.identityconnectors.common.security.GuardedString
 

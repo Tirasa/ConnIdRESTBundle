@@ -15,7 +15,7 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 import java.util.ArrayList;
 import java.util.List;
 import net.tirasa.connid.bundles.rest.service.InMemoryUserService;
@@ -40,7 +40,7 @@ public class AbstractTests {
         sf.setResourceClasses(UserService.class);
 
         List<Object> providers = new ArrayList<>();
-        providers.add(new JacksonJaxbJsonProvider());
+        providers.add(new JacksonJsonProvider());
         sf.setProviders(providers);
 
         sf.setResourceProvider(UserService.class, new SingletonResourceProvider(new InMemoryUserService(), true));

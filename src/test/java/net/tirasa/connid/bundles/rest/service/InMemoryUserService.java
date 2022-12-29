@@ -15,21 +15,21 @@
  */
 package net.tirasa.connid.bundles.rest.service;
 
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.NotFoundException;
 
 public class InMemoryUserService implements UserService {
 
-    private static final Map<UUID, User> USERS = new HashMap<UUID, User>();
+    private static final Map<UUID, User> USERS = new HashMap<>();
 
     @Override
     public List<User> list() {
-        return new ArrayList<User>(USERS.values());
+        return new ArrayList<>(USERS.values());
     }
 
     @Override
@@ -105,5 +105,4 @@ public class InMemoryUserService implements UserService {
     public void clear() {
         USERS.clear();
     }
-
 }

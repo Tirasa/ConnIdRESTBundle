@@ -17,10 +17,10 @@ package net.tirasa.connid.bundles.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 import net.tirasa.connid.commons.scripted.AbstractScriptedConnector;
 import net.tirasa.connid.commons.scripted.Constants;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -36,7 +36,7 @@ import org.identityconnectors.framework.spi.ConnectorClass;
 @ConnectorClass(configurationClass = RESTConfiguration.class, displayNameKey = "rest.connector.display")
 public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> {
 
-    private WebClient client;
+    protected WebClient client;
 
     @Override
     public void init(final Configuration cfg) {
@@ -49,10 +49,12 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 null).
                 accept(config.getAccept()).
                 type(config.getContentType());
+
         if (StringUtil.isNotBlank(config.getCliendId())
                 && StringUtil.isNotBlank(config.getClientSecret())
                 && StringUtil.isNotBlank(config.getAccessTokenBaseAddress())
                 && StringUtil.isNotBlank(config.getAccessTokenNodeId())) {
+
             this.client = WebClient.create(config.getBaseAddress())
                     .type(config.getAccept())
                     .accept(config.getContentType());
@@ -70,7 +72,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         super.init(cfg);
     }
 
-    private String generateToken() {
+    protected String generateToken() {
         WebClient webClient = WebClient
                 .create(config.getAccessTokenBaseAddress())
                 .type(config.getAccessTokenContentType())
@@ -103,7 +105,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
 
     @Override
     protected Map<String, Object> buildArguments() {
-        final Map<String, Object> arguments = new HashMap<String, Object>();
+        Map<String, Object> arguments = new HashMap<>();
         arguments.put("configuration", config);
         arguments.put("client", client);
         return arguments;
@@ -120,5 +122,4 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
 
         return new FIQLFilterTranslator();
     }
-
 }

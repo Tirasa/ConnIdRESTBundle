@@ -23,12 +23,12 @@
   <parent>
     <groupId>net.tirasa.connid</groupId>
     <artifactId>connid</artifactId>
-    <version>1.5.1.0</version>
+    <version>1.6.0.0-SNAPSHOT</version>
   </parent>
     
   <groupId>net.tirasa.connid.bundles</groupId>
   <artifactId>net.tirasa.connid.bundles.rest</artifactId>
-  <version>1.0.8-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
 
   <name>ConnId Bundles: REST</name>
 
@@ -76,9 +76,9 @@
   </mailingLists>
 
   <properties>
-    <connid.version>1.5.1.0</connid.version>
-    <cxf.version>3.5.3</cxf.version>
-    <jackson.version>2.13.4</jackson.version>
+    <connid.version>1.6.0.0-SNAPSHOT</connid.version>
+    <cxf.version>4.0.0</cxf.version>
+    <jackson.version>2.14.1</jackson.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -87,9 +87,9 @@
     <dependency>
       <groupId>net.tirasa.connid.commons</groupId>
       <artifactId>commons-scripted</artifactId>
-      <version>1.4.1.4</version>
+      <version>1.6.0.0-SNAPSHOT</version>
     </dependency>
-        
+
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-rs-client</artifactId>
@@ -104,16 +104,6 @@
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-transports-http-hc</artifactId>
       <version>${cxf.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jcl-over-slf4j</artifactId>
-        </exclusion>
-      </exclusions> 
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
@@ -124,19 +114,19 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}.2</version>
+      <version>${jackson.version}</version>
     </dependency>
         
     <!-- TEST -->
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.jaxrs</groupId>
-      <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+      <artifactId>jackson-jakarta-rs-json-provider</artifactId>
       <version>${jackson.version}</version>
       <scope>test</scope>
     </dependency>
@@ -170,8 +160,7 @@
         <version>3.10.1</version>
         <inherited>false</inherited>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <release>11</release>
           <useIncrementalCompilation>false</useIncrementalCompilation>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
@@ -191,7 +180,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>0.14</version>
+        <version>0.15</version>
         <configuration>
           <excludes>
             <exclude>**/nbactions.xml</exclude>

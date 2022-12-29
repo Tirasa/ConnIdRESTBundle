@@ -15,7 +15,7 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import net.tirasa.connid.commons.scripted.AbstractScriptedConfiguration;
 import org.identityconnectors.common.security.GuardedString;
 import org.identityconnectors.framework.spi.ConfigurationProperty;

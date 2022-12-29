@@ -39,11 +39,8 @@ import org.identityconnectors.framework.common.objects.filter.StartsWithFilter;
  */
 public class FIQLFilterTranslator extends AbstractFilterTranslator<Map<String, Object>> {
 
-    /**
-     * {@inheritDoc}
-     */
     private Map<String, Object> createMap(ConditionType conditionType, AttributeFilter filter) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         String name = filter.getAttribute().getName();
         String value = AttributeUtil.getAsStringValue(filter.getAttribute());
         if (StringUtil.isBlank(value)) {
@@ -115,7 +112,7 @@ public class FIQLFilterTranslator extends AbstractFilterTranslator<Map<String, O
     protected Map<String, Object> createAndExpression(
             Map<String, Object> leftExpression, Map<String, Object> rightExpression) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("conditionType", ConditionType.AND);
         map.put("left", leftExpression);
         map.put("right", rightExpression);
@@ -129,7 +126,7 @@ public class FIQLFilterTranslator extends AbstractFilterTranslator<Map<String, O
     protected Map<String, Object> createOrExpression(
             Map<String, Object> leftExpression, Map<String, Object> rightExpression) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("conditionType", ConditionType.OR);
         map.put("left", leftExpression);
         map.put("right", rightExpression);
