@@ -31,16 +31,16 @@ import org.identityconnectors.common.security.GuardedString
 //
 // The Query map describes the filter used (via FIQL's ConditionType):
 //
-// query = [ operation: "EQUALS", left: attribute, right: "value" ]
-// query = [ operation: "GREATER_THAN", left: attribute, right: "value" ]
-// query = [ operation: "GREATER_OR_EQUALS", left: attribute, right: "value" ]
-// query = [ operation: "LESS_THAN", left: attribute, right: "value" ]
-// query = [ operation: "LESS_OR_EQUALS", left: attribute, right: "value" ]
+// query = [ ConditionType "EQUALS", left: attribute, right: "value" ]
+// query = [ ConditionType "GREATER_THAN", left: attribute, right: "value" ]
+// query = [ ConditionType "GREATER_OR_EQUALS", left: attribute, right: "value" ]
+// query = [ ConditionType "LESS_THAN", left: attribute, right: "value" ]
+// query = [ ConditionType "LESS_OR_EQUALS", left: attribute, right: "value" ]
 // query = null : then we assume we fetch everything
 //
 // AND and OR filter just embed a left/right couple of queries.
-// query = [ operation: "AND", left: query1, right: query2 ]
-// query = [ operation: "OR", left: query1, right: query2 ]
+// query = [ ConditionType "AND", left: query1, right: query2 ]
+// query = [ ConditionType "OR", left: query1, right: query2 ]
 //
 // Returns: A list of Maps. Each map describing one row.
 // !!!! Each Map must contain a '__UID__' and '__NAME__' attribute.
@@ -67,7 +67,7 @@ def result = []
 
 switch (objectClass) {
 case "__ACCOUNT__":
-  if (query == null || (!query.get("left").equals("__UID__") && !query.get("conditionType").equals("EQUALS"))) {
+  if (query == null || (!query.get("left").equals("__UID__") && !query.get("conditionType").name().equals("EQUALS"))) {
     webClient.path("/users");
     Response response = webClient.get();    
     ArrayNode node = mapper.readTree(response.getEntity());
