@@ -189,6 +189,24 @@
       </plugin>
 
       <plugin>
+        <groupId>org.gaul</groupId>
+        <artifactId>modernizer-maven-plugin</artifactId>
+        <version>2.6.0</version>
+        <configuration>
+          <javaVersion>${targetJdk}</javaVersion>
+        </configuration>
+        <executions>
+          <execution>
+            <id>modernizer-check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>modernizer</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <version>0.15</version>
