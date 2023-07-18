@@ -50,7 +50,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 accept(config.getAccept()).
                 type(config.getContentType());
 
-        if (StringUtil.isNotBlank(config.getCliendId())
+        if (StringUtil.isNotBlank(config.getClientId())
                 && StringUtil.isNotBlank(config.getClientSecret())
                 && StringUtil.isNotBlank(config.getAccessTokenBaseAddress())
                 && StringUtil.isNotBlank(config.getAccessTokenNodeId())) {
@@ -79,7 +79,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 .accept(config.getAccept());
 
         String contentUri = new StringBuilder("&client_id=")
-                .append(config.getCliendId())
+                .append(config.getClientId())
                 .append("&client_secret=")
                 .append(config.getClientSecret())
                 .append("&username=")

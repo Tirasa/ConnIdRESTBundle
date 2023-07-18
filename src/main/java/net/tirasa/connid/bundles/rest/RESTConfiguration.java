@@ -86,11 +86,11 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
 
     @ConfigurationProperty(displayMessageKey = "clientId.display",
             helpMessageKey = "clientId.help", order = 2)
-    public String getCliendId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setCliendId(final String clientId) {
+    public void setClientId(final String clientId) {
         this.clientId = clientId;
     }
 
