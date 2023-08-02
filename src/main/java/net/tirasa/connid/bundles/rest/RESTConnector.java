@@ -56,8 +56,8 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                 && StringUtil.isNotBlank(config.getAccessTokenNodeId())) {
 
             this.client = WebClient.create(config.getBaseAddress())
-                    .type(config.getAccept())
-                    .accept(config.getContentType());
+                    .accept(config.getAccept())
+                    .type(config.getContentType());
             this.client.header(HttpHeaders.AUTHORIZATION, "Bearer " + generateToken());
         } else {
             this.client = WebClient.create(config.getBaseAddress(),
@@ -65,8 +65,8 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                     config.getUsername(),
                     config.getPassword() == null ? null : SecurityUtil.decrypt(config.getPassword()),
                     null)
-                    .type(config.getAccept())
-                    .accept(config.getContentType());
+                    .accept(config.getAccept())
+                    .type(config.getContentType());
         }
 
         super.init(cfg);
