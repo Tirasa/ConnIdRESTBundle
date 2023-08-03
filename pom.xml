@@ -23,7 +23,7 @@
   <parent>
     <groupId>net.tirasa.connid</groupId>
     <artifactId>connid</artifactId>
-    <version>1.5.1.0</version>
+    <version>1.5.2.0</version>
   </parent>
     
   <groupId>net.tirasa.connid.bundles</groupId>
@@ -76,9 +76,9 @@
   </mailingLists>
 
   <properties>
-    <connid.version>1.5.1.0</connid.version>
-    <cxf.version>3.5.3</cxf.version>
-    <jackson.version>2.13.4</jackson.version>
+    <connid.version>1.5.2.0</connid.version>
+    <cxf.version>3.5.6</cxf.version>
+    <jackson.version>2.13.5</jackson.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}.2</version>
+      <version>${jackson.version}</version>
     </dependency>
         
     <!-- TEST -->
@@ -191,7 +191,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>0.14</version>
+        <version>0.15</version>
         <configuration>
           <excludes>
             <exclude>**/nbactions.xml</exclude>
