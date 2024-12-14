@@ -16,13 +16,12 @@
 package net.tirasa.connid.bundles.rest.service;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public class User implements Serializable {
 
     private static final long serialVersionUID = -7906946710921162676L;
 
-    private UUID key;
+    private String key;
 
     private String username;
 
@@ -34,11 +33,11 @@ public class User implements Serializable {
 
     private String email;
 
-    public UUID getKey() {
+    public String getKey() {
         return key;
     }
 
-    public void setKey(UUID key) {
+    public void setKey(String key) {
         this.key = key;
     }
 

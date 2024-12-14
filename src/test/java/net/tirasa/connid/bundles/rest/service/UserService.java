@@ -23,7 +23,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import java.util.List;
-import java.util.UUID;
 
 @Path("users")
 public interface UserService {
@@ -33,18 +32,18 @@ public interface UserService {
 
     @GET
     @Path("{key}")
-    User read(@PathParam("key") UUID key);
+    User read(@PathParam("key") String key);
 
     @POST
     void create(User user);
 
     @PUT
     @Path("{key}")
-    void update(@PathParam("key") UUID key, User user);
+    void update(@PathParam("key") String key, User user);
 
     @DELETE
     @Path("{key}")
-    void delete(@PathParam("key") UUID key);
+    void delete(@PathParam("key") String key);
 
     @POST
     @Path("authenticate")

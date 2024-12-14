@@ -40,7 +40,7 @@ String key;
 switch (objectClass) {  
 case "__ACCOUNT__":
   User user = new User();
-  user.setKey(UUID.randomUUID());
+  user.setKey(UUID.randomUUID().toString());
   user.setUsername(id);
   user.setPassword(password);
   user.setFirstName(attributes.get("firstName").get(0));

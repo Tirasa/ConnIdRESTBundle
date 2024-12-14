@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public class InMemoryUserService implements UserService {
 
-    private static final Map<UUID, User> USERS = new HashMap<>();
+    private static final Map<String, User> USERS = new HashMap<>();
 
     @Override
     public List<User> list() {
@@ -33,10 +33,10 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User read(UUID key) {
+    public User read(String key) {
         User user = USERS.get(key);
         if (user == null) {
-            throw new NotFoundException(key.toString());
+            throw new NotFoundException(key);
         }
         return user;
     }
@@ -44,7 +44,7 @@ public class InMemoryUserService implements UserService {
     @Override
     public void create(User user) {
         if (user.getKey() == null) {
-            user.setKey(UUID.randomUUID());
+            user.setKey(UUID.randomUUID().toString());
         }
         if (USERS.containsKey(user.getKey())) {
             throw new IllegalArgumentException("User already exists: " + user.getKey());
@@ -53,9 +53,9 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public void update(UUID key, User updatedUser) {
+    public void update(String key, User updatedUser) {
         if (!USERS.containsKey(key)) {
-            throw new NotFoundException(updatedUser.getKey().toString());
+            throw new NotFoundException(updatedUser.getKey());
         }
         User user = USERS.get(key);
         if (updatedUser.getUsername() != null) {
@@ -76,7 +76,7 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public void delete(UUID key) {
+    public void delete(String key) {
         if (!USERS.containsKey(key)) {
             throw new NotFoundException(key.toString());
         }
