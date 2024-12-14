@@ -56,7 +56,7 @@ case "UPDATE":
   switch (objectClass) {  
   case "__ACCOUNT__":
     User user = new User();
-    user.setKey(new UUID(uid.getBytes()));
+    user.setKey((uid));
     if (attributes.containsKey("__NAME__")) {
       user.setUsername(attributes.get("__NAME__").get(0));
     }

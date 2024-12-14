@@ -160,12 +160,42 @@
         <version>3.13.0</version>
         <inherited>false</inherited>
         <configuration>
-          <release>11</release>
+          <release>17</release>
           <useIncrementalCompilation>false</useIncrementalCompilation>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
           <compilerArgument>-Xlint:unchecked</compilerArgument>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>ianal-maven-plugin</artifactId>
+        <inherited>true</inherited>
+        <executions>
+          <execution>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.geronimo.genesis.plugins</groupId>
+        <artifactId>tools-maven-plugin</artifactId>
+        <version>1.4</version>
+        <configuration>
+          <!-- Fail the build if any artifacts are missing legal files -->
+          <strict>true</strict>
+        </configuration>
+        <executions>
+          <execution>
+            <id>verify-legal-files</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>verify-legal-files</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
