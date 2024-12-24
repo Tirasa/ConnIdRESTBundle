@@ -76,7 +76,7 @@
   </mailingLists>
 
   <properties>
-    <connid.version>1.6.0.0-RC1</connid.version>
+    <connid.version>1.6.0.0-RC2</connid.version>
     <cxf.version>4.1.0</cxf.version>
     <jackson.version>2.18.2</jackson.version>
 
