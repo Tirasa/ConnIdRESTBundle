@@ -23,7 +23,7 @@
   <parent>
     <groupId>net.tirasa.connid</groupId>
     <artifactId>connid</artifactId>
-    <version>1.6.0.0</version>
+    <version>1.6.0.1</version>
   </parent>
     
   <groupId>net.tirasa.connid.bundles</groupId>
@@ -62,24 +62,12 @@
     <url>https://github.com/Tirasa/ConnIdRESTBundle/actions</url>
   </ciManagement>
 
-  <mailingLists>
-    <mailingList>
-      <name>connid-dev</name>
-      <post>connid-dev@googlegroups.com</post>
-      <archive>http://groups.google.com/group/connid-dev</archive>
-    </mailingList>
-    <mailingList>
-      <name>connid-users</name>
-      <post>connid-users@googlegroups.com</post>
-      <archive>http://groups.google.com/group/connid-users</archive>
-    </mailingList>
-  </mailingLists>
-
   <properties>
-    <connid.version>1.6.0.0</connid.version>
+    <connid.version>1.6.0.1</connid.version>
     <cxf.version>4.1.1</cxf.version>
     <jackson.version>2.18.3</jackson.version>
 
+    <targetJdk>17</targetJdk>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -160,7 +148,7 @@
         <version>3.14.0</version>
         <inherited>false</inherited>
         <configuration>
-          <release>17</release>
+          <release>${targetJdk}</release>
           <useIncrementalCompilation>false</useIncrementalCompilation>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
@@ -341,17 +329,4 @@
       </resource>
     </resources> 
   </build>
-
-  <repositories>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 </project>
