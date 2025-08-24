@@ -23,7 +23,7 @@
   <parent>
     <groupId>net.tirasa.connid</groupId>
     <artifactId>connid</artifactId>
-    <version>1.6.0.1</version>
+    <version>1.6.1.0-SNAPSHOT</version>
   </parent>
     
   <groupId>net.tirasa.connid.bundles</groupId>
@@ -63,7 +63,7 @@
   </ciManagement>
 
   <properties>
-    <connid.version>1.6.0.1</connid.version>
+    <connid.version>1.6.1.0-SNAPSHOT</connid.version>
     <cxf.version>4.1.3</cxf.version>
     <jackson.version>2.19.2</jackson.version>
 
@@ -109,6 +109,17 @@
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-sql</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.tirasa</groupId>
+      <artifactId>groovy-security-sandbox</artifactId>
       <scope>test</scope>
     </dependency>
 

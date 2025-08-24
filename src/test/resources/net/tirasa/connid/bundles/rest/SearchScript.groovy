@@ -72,7 +72,7 @@ case "__ACCOUNT__":
     Response response = webClient.get();    
     ArrayNode node = mapper.readTree(response.getEntity());
     
-    for (i = 0; i < node.size(); i++) {
+    for (int i = 0; i < node.size(); i++) {
       result.add(buildConnectorObject(node.get(i)));
     }
   } else {
