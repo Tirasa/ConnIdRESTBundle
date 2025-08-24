@@ -84,7 +84,7 @@ if (action.equalsIgnoreCase("GET_LATEST_SYNC_TOKEN")) {
     Response response = webClient.get();    
     ArrayNode node = mapper.readTree(response.getEntity());
     
-    for (i = 0; i < node.size(); i++) {
+    for (int i = 0; i < node.size(); i++) {
       result.add([
           operation:"CREATE_OR_UPDATE",
           uid:node.get(i).get("key").textValue(),
