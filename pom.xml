@@ -118,12 +118,6 @@
     </dependency>
 
     <dependency>
-      <groupId>net.tirasa</groupId>
-      <artifactId>groovy-security-sandbox</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
       <artifactId>jackson-jakarta-rs-json-provider</artifactId>
       <version>${jackson.version}</version>
