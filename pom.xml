@@ -65,7 +65,7 @@
   <properties>
     <connid.version>1.6.1.0</connid.version>
     <cxf.version>4.1.4</cxf.version>
-    <jackson.version>2.20.1</jackson.version>
+    <jackson.version>2.21.0</jackson.version>
 
     <targetJdk>17</targetJdk>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
