@@ -17,11 +17,15 @@ package net.tirasa.connid.bundles.rest.service;
 
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.tirasa.connid.bundles.rest.api.UserService;
+import net.tirasa.connid.bundles.rest.model.User;
+import net.tirasa.connid.bundles.rest.security.Secured;
 
 public class InMemoryUserService implements UserService {
 
@@ -86,6 +90,16 @@ public class InMemoryUserService implements UserService {
     @Override
     public User authenticate(String username, String password) {
         User user = null;
+        if ("admin".equals(username)) {
+            User adminUser = new User();
+            adminUser.setKey("admin");
+            adminUser.setUsername("admin");
+            adminUser.setPassword("password");
+            adminUser.setFirstName("admin");
+            adminUser.setSurname("admin");
+            return adminUser;
+        }
+
         for (User entry : USERS.values()) {
             if (username.equals(entry.getUsername())) {
                 user = entry;
@@ -99,6 +113,24 @@ public class InMemoryUserService implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public Response oAuth(String grantType, String clientId, String clientSecret) {
+        if ("client_credentials".equals(grantType)
+                && "admin".equals(clientId)
+                && "password".equals(clientSecret)) {
+
+            String token = "admin";
+
+            return Response.ok(Map.of(
+                    "access_token", token,
+                    "token_type", "Bearer",
+                    "expires_in", 3600
+            )).build();
+        }
+
+        return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 
     @Override

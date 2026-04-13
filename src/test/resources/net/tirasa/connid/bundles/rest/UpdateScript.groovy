@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.tirasa.connid.bundles.rest.service.User
+import net.tirasa.connid.bundles.rest.model.User
 import org.apache.cxf.jaxrs.client.WebClient
 
 // Parameters:
@@ -43,11 +43,14 @@ import org.apache.cxf.jaxrs.client.WebClient
 // password: password string, clear text (only for UPDATE)
 //
 // options: a handler to the OperationOptions Map
+//
+// accessToken: access token for connection instance
 
-log.info("Entering " + action + " Script");
+log.info("Entering " + action + " Script")
 
-WebClient webClient = client;
-ObjectMapper mapper = new ObjectMapper();
+WebClient webClient = client
+webClient.header("X-Api-Token", accessToken)
+ObjectMapper mapper = new ObjectMapper()
 
 assert uid != null
 
@@ -55,32 +58,32 @@ switch (action) {
 case "UPDATE":
   switch (objectClass) {  
   case "__ACCOUNT__":
-    User user = new User();
-    user.setKey((uid));
+    User user = new User()
+    user.setKey((uid))
     if (attributes.containsKey("__NAME__")) {
-      user.setUsername(attributes.get("__NAME__").get(0));
+      user.setUsername(attributes.get("__NAME__").get(0))
     }
     if (attributes.containsKey("username")) {
-      user.setUsername(attributes.get("username").get(0));
+      user.setUsername(attributes.get("username").get(0))
     }
     if (password != null) {
-      user.setPassword(password);
+      user.setPassword(password)
     }
     if (attributes.containsKey("firstName")) {
-      user.setFirstName(attributes.get("firstName").get(0));
+      user.setFirstName(attributes.get("firstName").get(0))
     }
     if (attributes.containsKey("surname")) {
-      user.setSurname(attributes.get("surname").get(0));
+      user.setSurname(attributes.get("surname").get(0))
     }
     if (attributes.containsKey("email")) {
-      user.setEmail(attributes.get("email").get(0));
+      user.setEmail(attributes.get("email").get(0))
     }
     
-    String payload = mapper.writeValueAsString(user);
+    String payload = mapper.writeValueAsString(user)
 
     // this if update works with PUT
-    webClient.path("users").path(uid);
-    webClient.put(payload);
+    webClient.path("users").path(uid)
+    webClient.put(payload)
     
     // this instead if update works with PATCH
     //webClient.path("users").path(uid);
@@ -91,7 +94,7 @@ case "UPDATE":
     break
   }
 
-  return uid;
+  return uid
   break
 
 case "ADD_ATTRIBUTE_VALUES":

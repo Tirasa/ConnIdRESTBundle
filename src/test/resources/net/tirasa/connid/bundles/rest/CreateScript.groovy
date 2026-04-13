@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.tirasa.connid.bundles.rest.service.User
+import jakarta.ws.rs.core.Response
+import net.tirasa.connid.bundles.rest.model.User
 import org.apache.cxf.jaxrs.client.WebClient
-import org.identityconnectors.framework.common.objects.Uid
 
 // Parameters:
 // The connector sends us the following:
@@ -29,34 +29,39 @@ import org.identityconnectors.framework.common.objects.Uid
 // and the <List> attribute value(s) as value.
 // password: password string, clear text
 // options: a handler to the OperationOptions Map
+// accessToken: access token for connection instance
 
-log.info("Entering " + action + " Script");
+log.info("Entering " + action + " Script")
 
-WebClient webClient = client;
-ObjectMapper mapper = new ObjectMapper();
+WebClient webClient = client
+ObjectMapper mapper = new ObjectMapper()
 
-String key;
+String key
 
-switch (objectClass) {  
-case "__ACCOUNT__":
-  User user = new User();
-  user.setKey(UUID.randomUUID().toString());
-  user.setUsername(id);
-  user.setPassword(password);
-  user.setFirstName(attributes.get("firstName").get(0));
-  user.setSurname(attributes.get("surname").get(0));
-  user.setEmail(attributes.get("email").get(0));
-  
-  String payload = mapper.writeValueAsString(user);
-  
-  webClient.path("/users");
-  webClient.post(payload);
-  
-  key = user.getKey().toString();
-  break
+switch (objectClass) {
+    case "__ACCOUNT__":
+        User user = new User()
+        user.setKey(UUID.randomUUID().toString())
+        user.setUsername(id)
+        user.setPassword(password)
+        user.setFirstName(attributes.get("firstName").get(0))
+        user.setSurname(attributes.get("surname").get(0))
+        user.setEmail(attributes.get("email").get(0))
 
-default:
-  key = id;
+        String payload = mapper.writeValueAsString(user)
+
+        webClient.path("/users")
+        webClient.header("X-Api-Token", accessToken)
+
+        Response response = webClient.post(payload)
+        if (response.getStatus() == 204) {
+            return user.getKey()
+        } else {
+            throw new RuntimeException("Could not create user: " + id)
+        }
+
+    default:
+        key = id
 }
 
-return key;
+return key

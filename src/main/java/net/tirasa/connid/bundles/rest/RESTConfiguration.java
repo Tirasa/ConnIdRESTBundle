@@ -142,6 +142,30 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.accessTokenContentType = accessTokenContentType;
     }
 
+    private String connectionInitScript = "";
+
+    @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
+            helpMessageKey = "connectionInitScript", order = 10)
+    public String getConnectionInitScript() {
+        return connectionInitScript;
+    }
+
+    public void setConnectionInitScript(String value) {
+        this.connectionInitScript = value;
+    }
+
+    private String connectionInitScriptFileName = null;
+
+    @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
+            helpMessageKey = "connectionInitScript.help", order = 19)
+    public String getConnectionInitScriptFileName() {
+        return connectionInitScriptFileName;
+    }
+
+    public void setConnectionInitScriptFileName(String value) {
+        this.connectionInitScriptFileName = value;
+    }
+
     @Override
     public void validate() {
         LOG.info("Validate " + getClass().getName());

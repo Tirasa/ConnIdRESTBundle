@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.tirasa.connid.bundles.rest.service;
+package net.tirasa.connid.bundles.rest.model;
 
 import java.io.Serializable;
 
