@@ -150,7 +150,7 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         return connectionInitScript;
     }
 
-    public void setConnectionInitScript(String value) {
+    public void setConnectionInitScript(final String value) {
         this.connectionInitScript = value;
     }
 
@@ -162,7 +162,7 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         return connectionInitScriptFileName;
     }
 
-    public void setConnectionInitScriptFileName(String value) {
+    public void setConnectionInitScriptFileName(final String value) {
         this.connectionInitScriptFileName = value;
     }
 

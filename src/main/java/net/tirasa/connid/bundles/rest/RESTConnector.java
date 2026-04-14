@@ -15,13 +15,16 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import static net.tirasa.connid.commons.scripted.Constants.MSG_INVALID_SCRIPT;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 import net.tirasa.connid.commons.scripted.AbstractScriptedConnector;
 import net.tirasa.connid.commons.scripted.Constants;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.identityconnectors.common.StringUtil;
 import org.identityconnectors.common.script.ScriptExecutor;
 import org.identityconnectors.common.security.GuardedString;
 import org.identityconnectors.common.security.SecurityUtil;
@@ -46,6 +49,58 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         this.client = WebClient.create(config.getBaseAddress())
                 .accept(config.getAccept())
                 .type(config.getContentType());
+
+        if (!hasConnectionInitScript()) {
+            if (StringUtil.isNotBlank(config.getClientId())
+                    && StringUtil.isNotBlank(config.getClientSecret())
+                    && StringUtil.isNotBlank(config.getAccessTokenBaseAddress())
+                    && StringUtil.isNotBlank(config.getAccessTokenNodeId())) {
+
+                this.client = WebClient.create(config.getBaseAddress())
+                        .accept(config.getAccept())
+                        .type(config.getContentType());
+                this.client.header(HttpHeaders.AUTHORIZATION, "Bearer " + generateToken());
+            } else {
+                this.client = WebClient.create(config.getBaseAddress(),
+                                null,
+                                config.getUsername(),
+                                config.getPassword() == null ? null : SecurityUtil.decrypt(config.getPassword()),
+                                null)
+                        .accept(config.getAccept())
+                        .type(config.getContentType());
+            }
+        }
+    }
+
+    protected String generateToken() {
+        WebClient webClient = WebClient
+                .create(config.getAccessTokenBaseAddress())
+                .type(config.getAccessTokenContentType())
+                .accept(config.getAccept());
+
+        String contentUri = new StringBuilder("&client_id=")
+                .append(config.getClientId())
+                .append("&client_secret=")
+                .append(config.getClientSecret())
+                .append("&username=")
+                .append(config.getUsername())
+                .append("&password=")
+                .append(SecurityUtil.decrypt(config.getPassword()))
+                .toString();
+        String token = null;
+        try {
+            Response response = webClient.post(contentUri);
+            String responseAsString = response.readEntity(String.class);
+            JsonNode result = new ObjectMapper().readTree(responseAsString);
+            if (result == null || !result.hasNonNull(config.getAccessTokenNodeId())) {
+                throw new ConnectorException("No access token found - " + responseAsString);
+            }
+            token = result.get(config.getAccessTokenNodeId()).textValue();
+        } catch (Exception ex) {
+            throw new ConnectorException("While obtaining authentication token", ex);
+        }
+
+        return token;
     }
 
     @Override
@@ -53,7 +108,13 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("configuration", config);
         arguments.put("client", WebClient.fromClient(client, true));
-        arguments.put("accessToken", connectionInit(config.getUsername(), config.getPassword()));
+
+        if (hasConnectionInitScript()) {
+            arguments.put("accessToken", connectionInit(config.getUsername(), config.getPassword()));
+        } else {
+            arguments.put("accessToken", StringUtil.EMPTY);
+        }
+
         return arguments;
     }
 
@@ -100,7 +161,12 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
             }
             throw new ConnectorException("Connection Init script didn't return with the token value");
         } else {
-            throw new UnsupportedOperationException(config.getMessage(MSG_INVALID_SCRIPT));
+            throw new UnsupportedOperationException(config.getMessage(Constants.MSG_INVALID_SCRIPT));
         }
+    }
+
+    private boolean hasConnectionInitScript() {
+        return StringUtil.isNotBlank(config.getConnectionInitScript())
+                || StringUtil.isNotBlank(config.getConnectionInitScriptFileName());
     }
 }
