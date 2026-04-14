@@ -28,6 +28,7 @@ import org.identityconnectors.common.security.GuardedString
 // log: a handler to the Log facility
 // options: a handler to the OperationOptions Map
 // query: a handler to the Query Map
+// accessToken: access token for connection instance
 //
 // The Query map describes the filter used (via FIQL's ConditionType):
 //
@@ -47,49 +48,53 @@ import org.identityconnectors.common.security.GuardedString
 // This is required to build a ConnectorObject.
 
 def buildConnectorObject(node) {
-  return [
-    __UID__:node.get("key").textValue(), 
-    __NAME__:node.get("key").textValue(),
-    username:node.get("username").textValue(),
-    password:new GuardedString(node.get("password").textValue().toCharArray()),
-    firstName:node.get("firstName").textValue(),
-    surname:node.get("surname").textValue(),
-    email:node.get("email").textValue()
-  ];
+    return [
+            __UID__  : node.get("key").textValue(),
+            __NAME__ : node.get("key").textValue(),
+            username : node.get("username").textValue(),
+            password : new GuardedString(node.get("password").textValue().toCharArray()),
+            firstName: node.get("firstName").textValue(),
+            surname  : node.get("surname").textValue(),
+            email    : node.get("email").textValue()
+    ]
 }
 
-log.info("Entering " + action + " Script");
+log.info("Entering " + action + " Script")
 
-WebClient webClient = client;
-ObjectMapper mapper = new ObjectMapper();
+WebClient webClient = client
+webClient.header("X-Api-Token", accessToken)
+ObjectMapper mapper = new ObjectMapper()
 
 def result = []
 
 switch (objectClass) {
-case "__ACCOUNT__":
-  if (query == null || (!query.get("left").equals("__UID__") && !query.get("conditionType").name().equals("EQUALS"))) {
-    webClient.path("/users");
-    Response response = webClient.get();    
-    ArrayNode node = mapper.readTree(response.getEntity());
-    
-    for (int i = 0; i < node.size(); i++) {
-      result.add(buildConnectorObject(node.get(i)));
-    }
-  } else {
-    webClient.path("/users/" + query.get("right"));
-    Response response = webClient.get();
-    if (response.getStatus() == 200) {
-      ObjectNode node = mapper.readTree(response.getEntity());
-      result.add(buildConnectorObject(node));
-    } else {
-      log.warn("Could not read object {0}", query.get("right"));
-    }
-  }
+    case "__ACCOUNT__":
+        if (query == null || (!query.get("left").equals("__UID__") && !query.get("conditionType").name().equals("EQUALS"))) {
+            webClient.path("/users")
 
-  break
+            Response response = webClient.get()
+            if (response.getStatus() == 401) {
+                throw new RuntimeException("Could not search users")
+            }
 
-default:
-  result;
+            ArrayNode node = mapper.readTree(response.getEntity())
+            for (int i = 0; i < node.size(); i++) {
+                result.add(buildConnectorObject(node.get(i)))
+            }
+        } else {
+            webClient.path("/users/" + query.get("right"))
+            Response response = webClient.get()
+            if (response.getStatus() == 401 ) {
+                throw new RuntimeException("Unauthorized access: Could not read object " + query.get("right"))
+            } else if (response.getStatus() == 200) {
+                ObjectNode node = mapper.readTree(response.getEntity())
+                result.add(buildConnectorObject(node))
+            }
+        }
+        break
+
+    default:
+        result
 }
 
-return result;
+return result

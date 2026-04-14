@@ -23,7 +23,7 @@
   <parent>
     <groupId>net.tirasa.connid</groupId>
     <artifactId>connid</artifactId>
-    <version>1.6.1.0</version>
+    <version>1.6.1.1-SNAPSHOT</version>
   </parent>
     
   <groupId>net.tirasa.connid.bundles</groupId>
@@ -63,7 +63,7 @@
   </ciManagement>
 
   <properties>
-    <connid.version>1.6.1.0</connid.version>
+    <connid.version>1.6.1.1-SNAPSHOT</connid.version>
     <cxf.version>4.1.5</cxf.version>
     <jackson.version>2.21.2</jackson.version>
 

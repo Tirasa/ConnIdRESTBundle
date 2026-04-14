@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import jakarta.ws.rs.core.Response
 import org.apache.cxf.jaxrs.client.WebClient
 
 // Parameters:
@@ -23,19 +25,28 @@ import org.apache.cxf.jaxrs.client.WebClient
 // objectClass: a String describing the Object class (__ACCOUNT__ / __GROUP__ / other)
 // options: a handler to the OperationOptions Map
 // uid: String for the unique id that specifies the object to delete
+// accessToken: access token for connection instance
 
-log.info("Entering " + action + " Script");
+log.info("Entering " + action + " Script")
 
-WebClient webClient = client;
+WebClient webClient = client
 
 assert uid != null
 
-switch ( objectClass ) {
-case "__ACCOUNT__":
-  webClient.path("/users/" + uid);
-  webClient.delete();
-  break
+switch (objectClass) {
+    case "__ACCOUNT__":
 
-default:
-  break
+        webClient.path("/users/" + uid)
+        log.info("DELETE PATH: {0}", webClient.getCurrentURI())
+        webClient.header("X-Api-Token", accessToken)
+        Response response = webClient.delete()
+        log.info("DELETE RESPONSE: {0}", response)
+        if (response.getStatus() != 204) {
+            throw new RuntimeException("Could not delete user: " + uid)
+        }
+
+        break
+
+    default:
+        break
 }

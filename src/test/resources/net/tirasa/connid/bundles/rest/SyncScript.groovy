@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
-import java.util.Date;
 import jakarta.ws.rs.core.Response
 import org.apache.cxf.jaxrs.client.WebClient
 import org.identityconnectors.common.security.GuardedString
@@ -28,6 +28,7 @@ import org.identityconnectors.common.security.GuardedString
 // log: a handler to the Log facility
 // options: a handler to the OperationOptions Map (null if action = "GET_LATEST_SYNC_TOKEN")
 // token: a handler to an Object representing the sync token (null if action = "GET_LATEST_SYNC_TOKEN")
+// accessToken: access token for connection instance
 //
 //
 // Returns:
@@ -48,56 +49,57 @@ import org.identityconnectors.common.security.GuardedString
 // ]
 
 def buildConnectorObject(node) {
-  return [
-    __UID__:node.get("key").textValue(), 
-    __NAME__:node.get("key").textValue(),
-    username:node.get("username").textValue(),
-    password:new GuardedString(node.get("password").textValue().toCharArray()),
-    firstName:node.get("firstName").textValue(),
-    surname:node.get("surname").textValue(),
-    email:node.get("email").textValue()
-  ];
+    return [
+            __UID__  : node.get("key").textValue(),
+            __NAME__ : node.get("key").textValue(),
+            username : node.get("username").textValue(),
+            password : new GuardedString(node.get("password").textValue().toCharArray()),
+            firstName: node.get("firstName").textValue(),
+            surname  : node.get("surname").textValue(),
+            email    : node.get("email").textValue()
+    ]
 }
 
-log.info("Entering " + action + " Script");
+log.info("Entering " + action + " Script")
 
-WebClient webClient = client;
-ObjectMapper mapper = new ObjectMapper();
+WebClient webClient = client
+webClient.header("X-Api-Token", accessToken)
+ObjectMapper mapper = new ObjectMapper()
 
 if (action.equalsIgnoreCase("GET_LATEST_SYNC_TOKEN")) {
-  switch (objectClass) {
-  case "__ACCOUNT__":
-    latestToken = new Date().getTime();
-    break;
-    
-  default:
-    latestToken = null;
-  }
+    switch (objectClass) {
+        case "__ACCOUNT__":
+            latestToken = new Date().getTime()
+            break
 
-  return latestToken;
-} else if (action.equalsIgnoreCase("SYNC")) {
-  def result = [];
-
-  switch (objectClass) {
-  case "__ACCOUNT__":
-    webClient.path("/users");
-    Response response = webClient.get();    
-    ArrayNode node = mapper.readTree(response.getEntity());
-    
-    for (int i = 0; i < node.size(); i++) {
-      result.add([
-          operation:"CREATE_OR_UPDATE",
-          uid:node.get(i).get("key").textValue(),
-          token:new Date().getTime(),
-          attributes:buildConnectorObject(node.get(i))
-        ]);
+        default:
+            latestToken = null
     }
-    break;
-  }
-  
-  log.ok("Sync script: found " + result.size() + " events to sync");
-  return result;
+
+    return latestToken
+} else if (action.equalsIgnoreCase("SYNC")) {
+    def result = []
+
+    switch (objectClass) {
+        case "__ACCOUNT__":
+            webClient.path("/users")
+            Response response = webClient.get()
+            ArrayNode node = mapper.readTree(response.getEntity())
+
+            for (int i = 0; i < node.size(); i++) {
+                result.add([
+                        operation : "CREATE_OR_UPDATE",
+                        uid       : node.get(i).get("key").textValue(),
+                        token     : new Date().getTime(),
+                        attributes: buildConnectorObject(node.get(i))
+                ])
+            }
+            break
+    }
+
+    log.ok("Sync script: found " + result.size() + " events to sync")
+    return result
 } else {
-  log.error("Sync script: action '" + action + "' is not implemented in this script");
-  return null;
+    log.error("Sync script: action '" + action + "' is not implemented in this script")
+    return null
 }

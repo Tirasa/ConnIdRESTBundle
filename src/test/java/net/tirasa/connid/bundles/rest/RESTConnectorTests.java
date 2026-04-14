@@ -52,9 +52,30 @@ import org.junit.jupiter.api.Test;
 
 public class RESTConnectorTests extends AbstractTests {
 
-    private RESTConfiguration newConfiguration() {
+    private RESTConfiguration defaultConfiguration() {
         RESTConfiguration conf = new RESTConfiguration();
         conf.setBaseAddress(BASE_ADDRESS);
+        conf.setUsername("admin");
+        conf.setPassword(new GuardedString("password".toCharArray()));
+        configureScripts(conf);
+        return conf;
+    }
+
+    private RESTConfiguration oAuthConfiguration() {
+        RESTConfiguration conf = new RESTConfiguration();
+        conf.setBaseAddress(BASE_ADDRESS);
+        conf.setUsername("admin");
+        conf.setPassword(new GuardedString("password".toCharArray()));
+        conf.setClientId("admin");
+        conf.setClientSecret("password");
+        conf.setAccessTokenBaseAddress("/users/oauth/token");
+        conf.setAccessTokenNodeId("access_token");
+        configureScripts(conf);
+        return conf;
+    }
+
+    private void configureScripts(RESTConfiguration conf) {
+        conf.setConnectionInitScript(IOUtil.getResourceAsString(getClass(), "/ConnectionInit.groovy"));
         conf.setTestScript(IOUtil.getResourceAsString(getClass(), "/TestScript.groovy"));
         conf.setSchemaScript(IOUtil.getResourceAsString(getClass(), "/SchemaScript.groovy"));
         conf.setSearchScript(IOUtil.getResourceAsString(getClass(), "/SearchScript.groovy"));
@@ -63,24 +84,30 @@ public class RESTConnectorTests extends AbstractTests {
         conf.setCreateScript(IOUtil.getResourceAsString(getClass(), "/CreateScript.groovy"));
         conf.setUpdateScript(IOUtil.getResourceAsString(getClass(), "/UpdateScript.groovy"));
         conf.setDeleteScript(IOUtil.getResourceAsString(getClass(), "/DeleteScript.groovy"));
-        return conf;
     }
 
-    private ConnectorFacade newFacade() {
+    private ConnectorFacade newDefaultFacade() {
         ConnectorFacadeFactory factory = ConnectorFacadeFactory.getInstance();
-        APIConfiguration impl = TestHelpers.createTestConfiguration(RESTConnector.class, newConfiguration());
+        APIConfiguration impl = TestHelpers.createTestConfiguration(RESTConnector.class, defaultConfiguration());
+        impl.getResultsHandlerConfiguration().setFilteredResultsHandlerInValidationMode(true);
+        return factory.newInstance(impl);
+    }
+
+    private ConnectorFacade newOAuthFacade() {
+        ConnectorFacadeFactory factory = ConnectorFacadeFactory.getInstance();
+        APIConfiguration impl = TestHelpers.createTestConfiguration(RESTConnector.class, oAuthConfiguration());
         impl.getResultsHandlerConfiguration().setFilteredResultsHandlerInValidationMode(true);
         return factory.newInstance(impl);
     }
 
     @Test
     public void test() {
-        newFacade().test();
+        newDefaultFacade().test();
     }
 
     @Test
     public void schema() {
-        Schema schema = newFacade().schema();
+        Schema schema = newDefaultFacade().schema();
         assertNotNull(schema);
         assertEquals(1, schema.getObjectClassInfo().size());
 
@@ -105,7 +132,7 @@ public class RESTConnectorTests extends AbstractTests {
     }
 
     private Uid doCreate() {
-        return newFacade().create(
+        return newDefaultFacade().create(
                 ObjectClass.ACCOUNT,
                 getUniqueSample(),
                 new OperationOptionsBuilder().build());
@@ -124,14 +151,14 @@ public class RESTConnectorTests extends AbstractTests {
         Set<Attribute> replaceAttributes = new HashSet<>();
         replaceAttributes.add(AttributeBuilder.build("email", CollectionUtil.newSet("updatedEmail")));
 
-        Uid updated = newFacade().update(
+        Uid updated = newDefaultFacade().update(
                 ObjectClass.ACCOUNT,
                 created,
                 replaceAttributes,
                 new OperationOptionsBuilder().build());
         assertEquals(created, updated);
 
-        ConnectorObject read = newFacade().getObject(
+        ConnectorObject read = newDefaultFacade().getObject(
                 ObjectClass.ACCOUNT, updated, new OperationOptionsBuilder().build());
         Attribute email = AttributeUtil.find("email", read.getAttributes());
         assertNotNull(email);
@@ -142,9 +169,9 @@ public class RESTConnectorTests extends AbstractTests {
     public void delete() {
         Uid created = doCreate();
 
-        newFacade().delete(ObjectClass.ACCOUNT, created, new OperationOptionsBuilder().build());
+        newDefaultFacade().delete(ObjectClass.ACCOUNT, created, new OperationOptionsBuilder().build());
 
-        ConnectorObject read = newFacade().getObject(
+        ConnectorObject read = newDefaultFacade().getObject(
                 ObjectClass.ACCOUNT, created, new OperationOptionsBuilder().build());
         assertNull(read);
     }
@@ -153,7 +180,7 @@ public class RESTConnectorTests extends AbstractTests {
     public void getObject() {
         Uid created = doCreate();
 
-        ConnectorObject read = newFacade().getObject(
+        ConnectorObject read = newDefaultFacade().getObject(
                 ObjectClass.ACCOUNT, created, new OperationOptionsBuilder().build());
         assertNotNull(read);
         assertEquals(created, read.getUid());
@@ -167,7 +194,7 @@ public class RESTConnectorTests extends AbstractTests {
         doCreate();
 
         final List<ConnectorObject> result = new ArrayList<>();
-        newFacade().search(ObjectClass.ACCOUNT,
+        newDefaultFacade().search(ObjectClass.ACCOUNT,
                 null,
                 new ResultsHandler() {
 
@@ -183,13 +210,13 @@ public class RESTConnectorTests extends AbstractTests {
 
     @Test
     public void sync() {
-        assertNotNull(newFacade().getLatestSyncToken(ObjectClass.ACCOUNT));
+        assertNotNull(newDefaultFacade().getLatestSyncToken(ObjectClass.ACCOUNT));
 
         doCreate();
         doCreate();
 
         final List<SyncDelta> result = new ArrayList<>();
-        newFacade().sync(ObjectClass.ACCOUNT,
+        newDefaultFacade().sync(ObjectClass.ACCOUNT,
                 null,
                 new SyncResultsHandler() {
 
@@ -213,7 +240,7 @@ public class RESTConnectorTests extends AbstractTests {
         replaceAttributes.add(new Name("username"));
         replaceAttributes.add(AttributeBuilder.buildPassword("password".toCharArray()));
 
-        Uid updated = newFacade().update(
+        Uid updated = newDefaultFacade().update(
                 ObjectClass.ACCOUNT,
                 created,
                 replaceAttributes,
@@ -221,7 +248,7 @@ public class RESTConnectorTests extends AbstractTests {
         assertEquals(created, updated);
 
         // then check for successful authentication
-        Uid authenticated = newFacade().authenticate(
+        Uid authenticated = newDefaultFacade().authenticate(
                 ObjectClass.ACCOUNT,
                 "username",
                 new GuardedString("password".toCharArray()),
@@ -230,7 +257,7 @@ public class RESTConnectorTests extends AbstractTests {
 
         // finally check for unsuccessful authentication
         try {
-            newFacade().authenticate(
+            newDefaultFacade().authenticate(
                     ObjectClass.ACCOUNT,
                     "username",
                     new GuardedString("password2".toCharArray()),
@@ -239,5 +266,32 @@ public class RESTConnectorTests extends AbstractTests {
         } catch (ConnectorException e) {
             assertTrue(e.getCause().getMessage().startsWith("Could not authenticate"));
         }
+    }
+
+    @Test
+    public void oAuth() {
+        ConnectorFacade facade = newOAuthFacade();
+        assertNotNull(facade);
+
+        Uid created = newOAuthFacade().create(
+                ObjectClass.ACCOUNT,
+                getUniqueSample(),
+                new OperationOptionsBuilder().build());
+
+        assertNotNull(created);
+
+        final List<ConnectorObject> result = new ArrayList<>();
+        newOAuthFacade().search(ObjectClass.ACCOUNT,
+                null,
+                new ResultsHandler() {
+
+                    @Override
+                    public boolean handle(final ConnectorObject connectorObject) {
+                        result.add(connectorObject);
+                        return true;
+                    }
+                }, new OperationOptionsBuilder().build());
+
+        assertEquals(1, result.size());
     }
 }

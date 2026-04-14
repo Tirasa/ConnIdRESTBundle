@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.cxf.jaxrs.client.WebClient
+package net.tirasa.connid.bundles.rest.security;
 
-// Parameters:
-// The connector sends the following:
-// client : CXF WebClient
-// action: a string describing the action ("TEST" here)
-// log: a handler to the Log facility
-// accessToken: access token for connection instance
+import jakarta.ws.rs.NameBinding;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-log.info("Entering " + action + " Script");
-
-WebClient webClient = client;
-webClient.header("X-Api-Token", accessToken)
-webClient.path("/users", false);
-webClient.get();
- 
+@NameBinding
+@Retention(RetentionPolicy.RUNTIME)
+@Target( { java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.METHOD })
+public @interface Secured {
+}

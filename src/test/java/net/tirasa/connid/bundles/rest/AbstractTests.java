@@ -18,8 +18,9 @@ package net.tirasa.connid.bundles.rest;
 import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 import java.util.ArrayList;
 import java.util.List;
+import net.tirasa.connid.bundles.rest.api.UserService;
+import net.tirasa.connid.bundles.rest.security.HeaderTokenAuthenticationFilter;
 import net.tirasa.connid.bundles.rest.service.InMemoryUserService;
-import net.tirasa.connid.bundles.rest.service.UserService;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
@@ -41,6 +42,7 @@ public class AbstractTests {
 
         List<Object> providers = new ArrayList<>();
         providers.add(new JacksonJsonProvider());
+        providers.add(new HeaderTokenAuthenticationFilter());
         sf.setProviders(providers);
 
         sf.setResourceProvider(UserService.class, new SingletonResourceProvider(new InMemoryUserService(), true));
