@@ -142,6 +142,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.accessTokenContentType = accessTokenContentType;
     }
 
+    private String extendedAttributes = "";
+
+    @ConfigurationProperty(displayMessageKey = "extendedAttributes.display",
+            helpMessageKey = "extendedAttributes.help", order = 9)
+    public String getExtendedAttributes() {
+        return extendedAttributes;
+    }
+
+    public void setExtendedAttributes(final String value) {
+        this.extendedAttributes = value;
+    }
+
     private String connectionInitScript = "";
 
     @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
@@ -195,6 +207,11 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         LOG.info("Validate " + getClass().getName());
 
         super.validate();
+
+        LOG.info("Checking Connection Init Script filename");
+        checkFileIsReadable("Connection Init", getConnectionInitScriptFileName());
+        LOG.info("Checking Health Check Script filename");
+        checkFileIsReadable("Health Check", getHealthCheckScriptFileName());
 
         LOG.ok("Configuration is valid");
     }
