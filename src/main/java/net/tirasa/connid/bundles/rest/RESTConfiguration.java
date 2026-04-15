@@ -162,7 +162,7 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         return healthCheckScript;
     }
 
-    public void setHealthCheckScript(String value) {
+    public void setHealthCheckScript(final String value) {
         this.healthCheckScript = value;
     }
 
@@ -186,7 +186,7 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         return healthCheckScriptFileName;
     }
 
-    public void setHealthCheckScriptFileName(String value) {
+    public void setHealthCheckScriptFileName(final String value) {
         this.healthCheckScriptFileName = value;
     }
 
