@@ -29,6 +29,7 @@ import org.identityconnectors.common.security.GuardedString
 // options: a handler to the OperationOptions Map
 // query: a handler to the Query Map
 // accessToken: access token for connection instance
+// extendedAttributes: a <String, Object> Map, containing custom attributes
 //
 // The Query map describes the filter used (via FIQL's ConditionType):
 //

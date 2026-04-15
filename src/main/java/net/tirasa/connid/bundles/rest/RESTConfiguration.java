@@ -166,6 +166,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.healthCheckScript = value;
     }
 
+    private String extendedAttributesScript = "";
+
+    @ConfigurationProperty(displayMessageKey = "extendedAttributesScript.display",
+            helpMessageKey = "extendedAttributesScript", order = 12)
+    public String getExtendedAttributesScript() {
+        return extendedAttributesScript;
+    }
+
+    public void setExtendedAttributesScript(final String value) {
+        this.extendedAttributesScript = value;
+    }
+
     private String connectionInitScriptFileName = null;
 
     @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
@@ -190,11 +202,30 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.healthCheckScriptFileName = value;
     }
 
+    private String extendedAttributesScriptFileName = null;
+
+    @ConfigurationProperty(displayMessageKey = "extendedAttributesScript.display",
+            helpMessageKey = "extendedAttributesScript.help", order = 21)
+    public String getExtendedAttributesScriptFileName() {
+        return extendedAttributesScriptFileName;
+    }
+
+    public void setExtendedAttributesScriptFileName(final String value) {
+        this.extendedAttributesScriptFileName = value;
+    }
+
     @Override
     public void validate() {
         LOG.info("Validate " + getClass().getName());
 
         super.validate();
+
+        LOG.info("Checking Connection Init Script filename");
+        checkFileIsReadable("Connection Init", getConnectionInitScriptFileName());
+        LOG.info("Checking Health Check Script filename");
+        checkFileIsReadable("Health Check", getHealthCheckScriptFileName());
+        LOG.info("Checking Extended Attributes Script filename");
+        checkFileIsReadable("Extended Attributes", getExtendedAttributesScriptFileName());
 
         LOG.ok("Configuration is valid");
     }

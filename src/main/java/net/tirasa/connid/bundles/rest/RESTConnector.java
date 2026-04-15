@@ -43,6 +43,8 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
 
     private ScriptExecutor healthCheckExecutor;
 
+    private ScriptExecutor extendedAttributesExecutor;
+
     protected WebClient client;
 
     protected String accessToken;
@@ -120,6 +122,12 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
             arguments.put("accessToken", accessToken);
         } else {
             arguments.put("accessToken", StringUtil.EMPTY);
+        }
+
+        if (hasExtendedAttributesScript()) {
+            arguments.put("extendedAttributes", extendedAttributes());
+        } else {
+            arguments.put("extendedAttributes", Map.of());
         }
 
         return arguments;
@@ -228,6 +236,35 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         }
     }
 
+    private Map<String, Object> extendedAttributes() {
+        if (checkReloadScript(extendedAttributesExecutor,
+                config.getExtendedAttributesScript(), config.getExtendedAttributesScriptFileName())) {
+            extendedAttributesExecutor = getScriptExecutor(
+                    config.getExtendedAttributesScript(), config.getExtendedAttributesScriptFileName());
+            LOG.ok("Extended Attributes script loaded");
+        }
+        if (extendedAttributesExecutor != null) {
+            Map<String, Object> arguments = new HashMap<>();
+
+            arguments.put("action", "EXTENDED ATTRIBUTES");
+            arguments.put("log", LOG);
+
+            try {
+                Object response = extendedAttributesExecutor.execute(arguments);
+                if (response instanceof Map<?,?>) {
+
+                    LOG.ok("Extended Attributes configuration is valid");
+                    return (Map<String, Object>) response;
+                }
+            } catch (Exception e) {
+                throw new ConnectorException("Extended Attributes script error", e);
+            }
+            throw new ConnectorException("Extended Attributes script didn't return with the Map value");
+        } else {
+            return Map.of();
+        }
+    }
+
     private boolean hasConnectionInitScript() {
         return StringUtil.isNotBlank(config.getConnectionInitScript())
                 || StringUtil.isNotBlank(config.getConnectionInitScriptFileName());
@@ -236,5 +273,10 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
     private boolean hasHealthCheckScript() {
         return StringUtil.isNotBlank(config.getHealthCheckScript())
                 || StringUtil.isNotBlank(config.getHealthCheckScriptFileName());
+    }
+
+    private boolean hasExtendedAttributesScript() {
+        return StringUtil.isNotBlank(config.getExtendedAttributesScript())
+                || StringUtil.isNotBlank(config.getExtendedAttributesScriptFileName());
     }
 }

@@ -22,6 +22,7 @@ import org.apache.cxf.jaxrs.client.WebClient
 // action: a string describing the action ("TEST" here)
 // log: a handler to the Log facility
 // accessToken: access token for connection instance
+// extendedAttributes: a <String, Object> Map, containing custom attributes
 
 log.info("Entering " + action + " Script");
 

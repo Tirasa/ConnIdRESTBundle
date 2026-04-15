@@ -29,6 +29,7 @@ import org.identityconnectors.common.security.GuardedString
 // options: a handler to the OperationOptions Map (null if action = "GET_LATEST_SYNC_TOKEN")
 // token: a handler to an Object representing the sync token (null if action = "GET_LATEST_SYNC_TOKEN")
 // accessToken: access token for connection instance
+// extendedAttributes: a <String, Object> Map, containing custom attributes
 //
 //
 // Returns:
