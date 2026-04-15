@@ -26,8 +26,6 @@ import org.apache.cxf.jaxrs.client.WebClient
 // username: username
 // password: password string, clear text or GuardedString depending on configuration
 // options: a handler to the OperationOptions Map
-// extendedAttributes: string parameter used to pass custom attributes to the script,
-//                     supporting any format such as JSON or other structured data
 
 log.info("Entering " + action + " Script");
 

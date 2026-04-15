@@ -45,9 +45,6 @@ import org.apache.cxf.jaxrs.client.WebClient
 // options: a handler to the OperationOptions Map
 //
 // accessToken: access token for connection instance
-//
-// extendedAttributes: string parameter used to pass custom attributes to the script,
-//                     supporting any format such as JSON or other structured data
 
 log.info("Entering " + action + " Script")
 

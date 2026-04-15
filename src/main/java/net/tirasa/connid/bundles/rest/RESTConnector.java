@@ -115,7 +115,6 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("configuration", config);
         arguments.put("client", WebClient.fromClient(client, true));
-        arguments.put("extendedAttributes", config.getExtendedAttributes());
 
         if (hasConnectionInitScript()) {
             arguments.put("accessToken", accessToken);
