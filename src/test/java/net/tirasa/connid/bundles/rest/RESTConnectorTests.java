@@ -76,6 +76,7 @@ public class RESTConnectorTests extends AbstractTests {
 
     private void configureScripts(RESTConfiguration conf) {
         conf.setConnectionInitScript(IOUtil.getResourceAsString(getClass(), "/ConnectionInit.groovy"));
+        conf.setHealthCheckScript(IOUtil.getResourceAsString(getClass(), "/HealthCheck.groovy"));
         conf.setTestScript(IOUtil.getResourceAsString(getClass(), "/TestScript.groovy"));
         conf.setSchemaScript(IOUtil.getResourceAsString(getClass(), "/SchemaScript.groovy"));
         conf.setSearchScript(IOUtil.getResourceAsString(getClass(), "/SearchScript.groovy"));

@@ -154,6 +154,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.connectionInitScript = value;
     }
 
+    private String healthCheckScript = "";
+
+    @ConfigurationProperty(displayMessageKey = "healthCheckScript.display",
+            helpMessageKey = "healthCheckScript", order = 11)
+    public String getHealthCheckScript() {
+        return healthCheckScript;
+    }
+
+    public void setHealthCheckScript(final String value) {
+        this.healthCheckScript = value;
+    }
+
     private String connectionInitScriptFileName = null;
 
     @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
@@ -164,6 +176,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
 
     public void setConnectionInitScriptFileName(final String value) {
         this.connectionInitScriptFileName = value;
+    }
+
+    private String healthCheckScriptFileName = null;
+
+    @ConfigurationProperty(displayMessageKey = "healthCheckScript.display",
+            helpMessageKey = "healthCheckScript.help", order = 20)
+    public String getHealthCheckScriptFileName() {
+        return healthCheckScriptFileName;
+    }
+
+    public void setHealthCheckScriptFileName(final String value) {
+        this.healthCheckScriptFileName = value;
     }
 
     @Override

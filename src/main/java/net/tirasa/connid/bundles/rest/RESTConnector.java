@@ -34,13 +34,18 @@ import org.identityconnectors.framework.common.objects.OperationOptions;
 import org.identityconnectors.framework.common.objects.filter.FilterTranslator;
 import org.identityconnectors.framework.spi.Configuration;
 import org.identityconnectors.framework.spi.ConnectorClass;
+import org.identityconnectors.framework.spi.PoolableConnector;
 
 @ConnectorClass(configurationClass = RESTConfiguration.class, displayNameKey = "rest.connector.display")
-public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> {
+public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> implements PoolableConnector {
 
     private ScriptExecutor connectionInitExecutor;
 
+    private ScriptExecutor healthCheckExecutor;
+
     protected WebClient client;
+
+    protected String accessToken;
 
     @Override
     public void init(final Configuration cfg) {
@@ -69,6 +74,8 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
                         .accept(config.getAccept())
                         .type(config.getContentType());
             }
+        } else {
+            this.accessToken = connectionInit(config.getUsername(), config.getPassword());
         }
     }
 
@@ -110,7 +117,7 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         arguments.put("client", WebClient.fromClient(client, true));
 
         if (hasConnectionInitScript()) {
-            arguments.put("accessToken", connectionInit(config.getUsername(), config.getPassword()));
+            arguments.put("accessToken", accessToken);
         } else {
             arguments.put("accessToken", StringUtil.EMPTY);
         }
@@ -128,6 +135,35 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         LOG.ok("ObjectClass: {0}", objectClass.getObjectClassValue());
 
         return new FIQLFilterTranslator();
+    }
+
+    @Override
+    public void dispose() {
+        if (client == null) {
+            LOG.ok("Dispose for poolable connection called but client is null, no operation executed");
+        } else {
+            client.close();
+        }
+    }
+
+    @Override
+    public void checkAlive() {
+        try {
+            if (client != null && hasHealthCheckScript()) {
+                try (Response response = healthCheck()) {
+                    if (response.getStatusInfo().getFamily() == Response.Status.Family.CLIENT_ERROR
+                            || response.getStatusInfo().getFamily() == Response.Status.Family.SERVER_ERROR) {
+                        throw new IllegalStateException(
+                                "Health checking connection results into the invalid response " + response);
+                    }
+                    LOG.ok("Health checking elaboration: connection is valid");
+                }
+            }
+
+            LOG.warn("Health check script not defined, health check skipped");
+        } catch (Exception ex) {
+            throw ConnectorException.wrap(ex);
+        }
     }
 
     private String connectionInit(
@@ -165,8 +201,40 @@ public class RESTConnector extends AbstractScriptedConnector<RESTConfiguration> 
         }
     }
 
+    private Response healthCheck() {
+        if (checkReloadScript(healthCheckExecutor,
+                config.getHealthCheckScript(), config.getHealthCheckScriptFileName())) {
+            healthCheckExecutor = getScriptExecutor(
+                    config.getHealthCheckScript(), config.getHealthCheckScriptFileName());
+            LOG.ok("Health Check script loaded");
+        }
+        if (healthCheckExecutor != null) {
+            Map<String, Object> arguments = buildArguments();
+
+            arguments.put("action", "HEALTH CHECK");
+            arguments.put("log", LOG);
+
+            try {
+                Object response = healthCheckExecutor.execute(arguments);
+                if (response instanceof Response) {
+                    return (Response) response;
+                }
+            } catch (Exception e) {
+                throw new ConnectorException("Health Check script error", e);
+            }
+            throw new ConnectorException("Health Check script didn't return with the Response value");
+        } else {
+            throw new UnsupportedOperationException(config.getMessage(Constants.MSG_INVALID_SCRIPT));
+        }
+    }
+
     private boolean hasConnectionInitScript() {
         return StringUtil.isNotBlank(config.getConnectionInitScript())
                 || StringUtil.isNotBlank(config.getConnectionInitScriptFileName());
+    }
+
+    private boolean hasHealthCheckScript() {
+        return StringUtil.isNotBlank(config.getHealthCheckScript())
+                || StringUtil.isNotBlank(config.getHealthCheckScriptFileName());
     }
 }
