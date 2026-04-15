@@ -142,6 +142,18 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.accessTokenContentType = accessTokenContentType;
     }
 
+    private String extendedAttributes = "";
+
+    @ConfigurationProperty(displayMessageKey = "extendedAttributes.display",
+            helpMessageKey = "extendedAttributes.help", order = 9)
+    public String getExtendedAttributes() {
+        return extendedAttributes;
+    }
+
+    public void setExtendedAttributes(final String value) {
+        this.extendedAttributes = value;
+    }
+
     private String connectionInitScript = "";
 
     @ConfigurationProperty(displayMessageKey = "connectionInitScript.display",
@@ -164,18 +176,6 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
 
     public void setHealthCheckScript(final String value) {
         this.healthCheckScript = value;
-    }
-
-    private String extendedAttributesScript = "";
-
-    @ConfigurationProperty(displayMessageKey = "extendedAttributesScript.display",
-            helpMessageKey = "extendedAttributesScript", order = 12)
-    public String getExtendedAttributesScript() {
-        return extendedAttributesScript;
-    }
-
-    public void setExtendedAttributesScript(final String value) {
-        this.extendedAttributesScript = value;
     }
 
     private String connectionInitScriptFileName = null;
@@ -202,18 +202,6 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         this.healthCheckScriptFileName = value;
     }
 
-    private String extendedAttributesScriptFileName = null;
-
-    @ConfigurationProperty(displayMessageKey = "extendedAttributesScript.display",
-            helpMessageKey = "extendedAttributesScript.help", order = 21)
-    public String getExtendedAttributesScriptFileName() {
-        return extendedAttributesScriptFileName;
-    }
-
-    public void setExtendedAttributesScriptFileName(final String value) {
-        this.extendedAttributesScriptFileName = value;
-    }
-
     @Override
     public void validate() {
         LOG.info("Validate " + getClass().getName());
@@ -224,8 +212,6 @@ public class RESTConfiguration extends AbstractScriptedConfiguration {
         checkFileIsReadable("Connection Init", getConnectionInitScriptFileName());
         LOG.info("Checking Health Check Script filename");
         checkFileIsReadable("Health Check", getHealthCheckScriptFileName());
-        LOG.info("Checking Extended Attributes Script filename");
-        checkFileIsReadable("Extended Attributes", getExtendedAttributesScriptFileName());
 
         LOG.ok("Configuration is valid");
     }

@@ -26,7 +26,8 @@ import org.identityconnectors.common.security.GuardedString
 // action: a string describing the action ("SEARCH" here)
 // accessToken: access token for connection instance
 // log: a handler to the Log facility
-// extendedAttributes: a <String, Object> Map, containing custom attributes
+// extendedAttributes: string parameter used to pass custom attributes to the script,
+//                     supporting any format such as JSON or other structured data
 
 log.info("Entering " + action + " Script")
 

@@ -26,7 +26,8 @@ import org.apache.cxf.jaxrs.client.WebClient
 // options: a handler to the OperationOptions Map
 // uid: String for the unique id that specifies the object to delete
 // accessToken: access token for connection instance
-// extendedAttributes: a <String, Object> Map, containing custom attributes
+// extendedAttributes: string parameter used to pass custom attributes to the script,
+//                     supporting any format such as JSON or other structured data
 
 log.info("Entering " + action + " Script")
 

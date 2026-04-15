@@ -58,6 +58,7 @@ public class RESTConnectorTests extends AbstractTests {
         conf.setUsername("admin");
         conf.setPassword(new GuardedString("password".toCharArray()));
         configureScripts(conf);
+        conf.setExtendedAttributes("{ \"testId\": \"testValue\"}");
         return conf;
     }
 
