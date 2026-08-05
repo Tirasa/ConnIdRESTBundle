@@ -287,12 +287,12 @@ public class RESTConnectorTests extends AbstractTests {
                 null,
                 new ResultsHandler() {
 
-                    @Override
-                    public boolean handle(final ConnectorObject connectorObject) {
-                        result.add(connectorObject);
-                        return true;
-                    }
-                }, new OperationOptionsBuilder().build());
+            @Override
+            public boolean handle(final ConnectorObject connectorObject) {
+                result.add(connectorObject);
+                return true;
+            }
+        }, new OperationOptionsBuilder().build());
 
         assertEquals(1, result.size());
     }
