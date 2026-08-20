@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.UUID;
 import net.tirasa.connid.bundles.rest.api.UserService;
 import net.tirasa.connid.bundles.rest.model.User;
-import net.tirasa.connid.bundles.rest.security.Secured;
 
 public class InMemoryUserService implements UserService {
 

@@ -15,11 +15,11 @@
  */
 package net.tirasa.connid.bundles.rest;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import org.apache.cxf.jaxrs.ext.search.ConditionType;
-import org.identityconnectors.framework.common.objects.AttributeUtil;
 import org.identityconnectors.common.StringUtil;
+import org.identityconnectors.framework.common.objects.AttributeUtil;
 import org.identityconnectors.framework.common.objects.filter.AbstractFilterTranslator;
 import org.identityconnectors.framework.common.objects.filter.AttributeFilter;
 import org.identityconnectors.framework.common.objects.filter.ContainsFilter;
@@ -104,7 +104,7 @@ public class FIQLFilterTranslator extends AbstractFilterTranslator<Map<String, O
     protected Map<String, Object> createEqualsIgnoreCaseExpression(EqualsIgnoreCaseFilter filter, boolean not) {
         return createMap(not ? ConditionType.NOT_EQUALS : ConditionType.EQUALS, filter);
     }
-    
+
     /**
      * {@inheritDoc}
      */
